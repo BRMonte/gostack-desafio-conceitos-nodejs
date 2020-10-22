@@ -70,7 +70,18 @@ app.delete("/repositories/:id", (request, response) => {
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+  const { id } = request.params;
+
+  const findRepositoryIndex = repositories.findIndex(repository => repository.id === id); //procuro o que quero deletar
+
+  if (findRepositoryIndex === -1) { // qnd algo n existe diante de uma comparação a resposta é -1. A comparação está 2 linnhas acima
+    return response.status(400).json({ error: 'Repository does not exist.' })
+  }
+
+  repositories[findRepositoryIndex].likes++; //incrementa os likes se a validação for positiva
+
+  return response.json(repositories[findRepositoryIndex]);
+
 });
 
 module.exports = app;
