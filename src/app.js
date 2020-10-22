@@ -31,21 +31,41 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const { title, url, techs } = request.body;
+  const { id } = request.params;
+
+  const findRepositoryIndex = repositories.findIndex(repository => repository.id === id); //procuro o que quero alterar
+
+  if (findRepositoryIndex === -1) { // qnd algo n existe, diante de uma comparação a resposta é -1. A comparação está 2 linnhas acima
+    return response.status(400).json({ error: 'Repository does not exist.' })
+  }
+
+  const repository = { //novo repositorio que sobrescrerá o original do ID
+    id,
+    title,
+    url,
+    techs,
+    likes: repositories[findRepositoryIndex].likes,
+  };
+
+  repositories[findRepositoryIndex] = repository
+
+  return response.json(repository);
+
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  const { id } = request.params;
+  const { id } = request.params; //defino o que quero deletar: o ID
 
-  const findRepositoryIndex = repositories.findIndex(repository => repository.id === id);
+  const findRepositoryIndex = repositories.findIndex(repository => repository.id === id); //procuro o que quero deletar
 
-  if (findRepositoryIndex >= 0) {
+  if (findRepositoryIndex >= 0) { //valido/confirmo o que quero deletar + deleto ou nao deleto
     repositories.splice(findRepositoryIndex, 1);
   } else {
     return response.status(400).json({ error: 'Repo does not exist.' });
   }
 
-  return response.status(204).send();
+  return response.status(204).send(); //dou feedback
 
 });
 
