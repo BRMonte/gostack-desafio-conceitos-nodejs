@@ -70,9 +70,9 @@ app.delete("/repositories/:id", (request, response) => {
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  const { id } = request.params;
+  const { id } = request.params; // estabeleço um parametro p encontrar o objeto
 
-  const findRepositoryIndex = repositories.findIndex(repository => repository.id === id); //procuro o que quero deletar
+  const findRepositoryIndex = repositories.findIndex(repository => repository.id === id); //procuro o que quero deletar usando o parametro (ID)
 
   if (findRepositoryIndex === -1) { // qnd algo n existe diante de uma comparação a resposta é -1. A comparação está 2 linnhas acima
     return response.status(400).json({ error: 'Repository does not exist.' })
